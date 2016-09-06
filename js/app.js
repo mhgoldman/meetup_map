@@ -7,7 +7,7 @@ function initMap() {
   });
   var geocoder = new google.maps.Geocoder();
 
-  $('.main_form').submit(function(e) {
+  $('.main-form').submit(function(e) {
     startSpinning();
     clearMarkers();
     e.preventDefault();
@@ -35,9 +35,9 @@ function findMeetups(map, loc) {
   lng = loc.lng();
 
   $.getJSON('https://api.meetup.com/2/groups?&key=165f2e85d23027f478a535b3436&photo-host=public&lon=' + lng + '&lat=' + lat + '&callback=?', function(data) {
-    num_results = Math.min(data.results.length, 25);
+    numResults = Math.min(data.results.length, 25);
 
-    for (i=0; i<num_results; i++) {
+    for (i=0; i<numResults; i++) {
       res = data.results[i];
       addMarker(map, {lat: res.lat, lng: res.lon}, null, res.name);
     }
@@ -73,3 +73,13 @@ function addMarker(map, pos, icon, title) {
 
   markersArray.push(marker);
 }
+
+function resizeMap() {
+  $('.map').height($(window).height() - $('header').height());
+}
+
+$(function() {
+  resizeMap();
+});
+
+$(window).resize(resizeMap);
