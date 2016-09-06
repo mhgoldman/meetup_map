@@ -30,24 +30,25 @@ header h1 {
 .form-container {
   padding-top: 0.5rem;
   text-align: center;
-  font-family: 'sans-serif';
+  font-family: sans-serif;
   line-height: 30px;
-  width: 300px;
+  width: 500px;
   float: right;
   margin: 0.25rem 0.5rem 0 0;
+  color: white;
 }
 
 .main-form {
   display: inline;
 }
 
-.address {
+.main-form input[type=text] {
   background-color: transparent;
   border: 0;
   border-bottom: 1px dotted white;
   color: white;
   font-size: 1rem;
-  width: 10rem;
+  width: 7rem;
   text-align: center;
 }
 
