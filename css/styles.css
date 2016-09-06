@@ -4,11 +4,11 @@ html, body {
   padding: 0;
 }
 
-#map {
+.map {
   height: 100%;
 }
 
-#floating-panel {
+.floating-panel {
   position: absolute;
   top: 10px;
   left: 25%;
@@ -17,24 +17,24 @@ html, body {
   padding: 5px;
   border: 1px solid #999;
   text-align: center;
-  font-family: 'Roboto','sans-serif';
+  font-family: 'sans-serif';
   line-height: 30px;
   padding-left: 10px;
   width: 250px;
 }
 
-#main_form {
+.main_form {
   display: inline;
 }
 
-#spinner {
+.spinner {
   display: none;
   height: 30px;
   width: 30px;
   padding: 0 27px;
 }
 
-#spinner img {
+.spinner img {
   height: 30px;
   vertical-align: middle;
  }

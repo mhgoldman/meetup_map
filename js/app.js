@@ -1,13 +1,13 @@
 var markersArray = [];
 
 function initMap() {
-  var map = new google.maps.Map(document.getElementById('map'), {
+  var map = new google.maps.Map($('.map').get()[0], {
     zoom: 12,
     center: {lat: 40.730610, lng: -73.935242}
   });
   var geocoder = new google.maps.Geocoder();
 
-  $('#main_form').submit(function(e) {
+  $('.main_form').submit(function(e) {
     startSpinning();
     clearMarkers();
     e.preventDefault();
@@ -16,7 +16,7 @@ function initMap() {
 }
 
 function geocodeAddress(geocoder, map) {
-  var address = $('#address').val();
+  var address = $('.address').val();
   geocoder.geocode({'address': address}, function(results, status) {
     if (status === 'OK') {
       loc = results[0].geometry.location;
@@ -24,7 +24,8 @@ function geocodeAddress(geocoder, map) {
       addMarker(map, loc, "http://maps.google.com/mapfiles/ms/icons/green-dot.png", address)
       findMeetups(map, loc);
     } else {
-      alert('Geocode was not successful for the following reason: ' + status);
+      alert('Location not found: ' + status);
+      stopSpinning();
     }
   });
 }
@@ -34,9 +35,9 @@ function findMeetups(map, loc) {
   lng = loc.lng();
 
   $.getJSON('https://api.meetup.com/2/groups?&key=165f2e85d23027f478a535b3436&photo-host=public&lon=' + lng + '&lat=' + lat + '&callback=?', function(data) {
-    num_results = Math.max(data.results.length, 25);
+    num_results = Math.min(data.results.length, 25);
 
-    for (i=0; i<25; i++) {
+    for (i=0; i<num_results; i++) {
       res = data.results[i];
       addMarker(map, {lat: res.lat, lng: res.lon}, null, res.name);
     }
@@ -47,13 +48,13 @@ function findMeetups(map, loc) {
 }
 
 function startSpinning() {
-  $('#submit').hide();
-  $('#spinner').css('display', 'inline');
+  $('.submit').hide();
+  $('.spinner').css('display', 'inline');
 }
 
 function stopSpinning() {
-  $('#spinner').hide();
-  $('#submit').show();
+  $('.spinner').hide();
+  $('.submit').show();
 }
 
 function clearMarkers() {
