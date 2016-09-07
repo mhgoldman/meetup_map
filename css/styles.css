@@ -1,5 +1,4 @@
 html, body {
-  /*height: 100%;*/
   margin: 0;
   padding: 0;
 }
@@ -19,6 +18,11 @@ header h1 {
   color: white;
 }
 
+header a {
+  color: white;
+  text-decoration: none;
+}
+
 .main {
   clear: both;
 }
@@ -36,6 +40,8 @@ header h1 {
   float: right;
   margin: 0.25rem 0.5rem 0 0;
   color: white;
+  font-size: 0.8rem;  
+
 }
 
 .main-form {
@@ -47,12 +53,12 @@ header h1 {
   border: 0;
   border-bottom: 1px dotted white;
   color: white;
-  font-size: 1rem;
   width: 7rem;
   text-align: center;
+  font-size: 0.8rem;
 }
 
-.address:focus {
+.main-form input[type=text]:focus {
     outline-width: 0;
 }
 

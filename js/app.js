@@ -3,8 +3,8 @@ var map = null;
 
 function initMap() {
   map = new google.maps.Map($('.map').get()[0], {
-    zoom: 12,
-    center: {lat: 40.730610, lng: -73.935242}
+    zoom: 8,
+    center: {lat: 40.7127837, lng: -74.00594130000002}
   });
   var geocoder = new google.maps.Geocoder();
 
@@ -22,11 +22,12 @@ function geocodeAddress(geocoder) {
   geocoder.geocode({'address': address}, function(results, status) {
     if (status === 'OK') {
       loc = results[0].geometry.location;
+
       map.setCenter(loc);
-      addMarker(loc, "http://maps.google.com/mapfiles/ms/icons/green-dot.png", address, google.maps.Marker.MAX_ZINDEX + 1)
+      addMarker(loc, "http://maps.google.com/mapfiles/ms/icons/green-dot.png", address, google.maps.Marker.MAX_ZINDEX + 1, null)
       findMeetups(loc);
     } else {
-      alert('Location not found: ' + status);
+      alert('Could not find the specified location');
       stopSpinning();
     }
   });
@@ -39,15 +40,19 @@ function findMeetups(loc) {
   if (topicSearchStr != '') {
     encodedTopicSearchStr = encodeURIComponent(topicSearchStr);
 
-    $.getJSON('https://api.meetup.com/find/topics?&sign=true&photo-host=public&query=' + encodedTopicSearchStr + '&callback=?', function(data) {
-      if (data["0"]) {
-        topicURLKey = data["0"].urlkey;
+    $.getJSON('https://api.meetup.com/find/topics?key=165f2e85d23027f478a535b3436&photo-host=public&query=' + encodedTopicSearchStr + '&callback=?', function(data) {
+      if (data.data.length > 0) {
+        topicURLKey = data.data[0].urlkey;
+        executeFindMeetups(loc, topicURLKey);
+      }
+      else {
+        alert("Could not find a topic matching " + topicSearchStr);
+        stopSpinning();
       }
 
-      executeFindMeetups(loc, topicURLKey);
     });
   } else {
-    executeFindMeetups(loc, null);    
+    executeFindMeetups(loc, '');    
   }
 }
 
@@ -55,14 +60,13 @@ function executeFindMeetups(loc, topic) {
   var lat = loc.lat();
   var lng = loc.lng();
   
-  $.getJSON('https://api.meetup.com/2/groups?&key=165f2e85d23027f478a535b3436&photo-host=public&topic=' + topic + '&lon=' + lng + '&lat=' + lat + '&callback=?', 
+  $.getJSON('https://api.meetup.com/2/groups?key=165f2e85d23027f478a535b3436&photo-host=public&topic=' + topic + '&lon=' + lng + '&lat=' + lat + '&callback=?', 
     function(data) {
-      console.log(data);
       numResults = data.results.length;
 
       for (i=0; i<numResults; i++) {
         res = data.results[i];
-        addMarker({lat: res.lat, lng: res.lon}, null, res.name);
+        addMarker({lat: res.lat, lng: res.lon}, null, res.name, null, res.link);
       }
 
       updateBounds();
@@ -88,7 +92,7 @@ function clearMarkers() {
   markersArray = [];
 }
 
-function addMarker(pos, icon, title, zindex) {
+function addMarker(pos, icon, title, zindex, url) {
   var marker = new google.maps.Marker({
     map: map,
     position: pos,
@@ -96,6 +100,12 @@ function addMarker(pos, icon, title, zindex) {
     title: title,
     zIndex: zindex
   });
+
+  if (url != null) {
+    marker.addListener('click', function() {
+      window.open(url,'_blank');
+    });
+  }
 
   markersArray.push(marker);
 }
