@@ -27,7 +27,7 @@ function geocodeAddress(geocoder) {
       addMarker(loc, "http://maps.google.com/mapfiles/ms/icons/green-dot.png", address, google.maps.Marker.MAX_ZINDEX + 1, null)
       findMeetups(loc);
     } else {
-      alert('Could not find the specified location');
+      toast('Could not find the specified location');
       stopSpinning();
     }
   });
@@ -46,7 +46,7 @@ function findMeetups(loc) {
         executeFindMeetups(loc, topicURLKey);
       }
       else {
-        alert("Could not find a topic matching " + topicSearchStr);
+        toast("Could not find a topic matching " + topicSearchStr);
         stopSpinning();
       }
 
@@ -74,6 +74,8 @@ function executeFindMeetups(loc, topic) {
       }
 
       updateBounds();
+
+      toast('Showing ' + numResults + ' groups');
       stopSpinning();
   });
 }
@@ -134,6 +136,12 @@ function closeAllInfoWindows() {
   }
 }
 
+function toast(str) {
+  $('.toast').html(str);
+  if ($('.toast').is(':hidden')) {
+    $('.toast').fadeIn().delay(5000).fadeOut();    
+  }
+}
 function resizeMap() {
   $('.map').height($(window).height() - $('header').height());
 }

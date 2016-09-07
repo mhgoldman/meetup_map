@@ -27,6 +27,10 @@ header a {
   height: 100%;
 }
 
+.main {
+  position: relative;
+}
+
 .form-container {
   padding-top: 0.5rem;
   font-family: sans-serif;
@@ -83,12 +87,21 @@ header a {
 }
 
 .toast {
+  border-radius: 5%;
   font-family: sans-serif;
   float: right;
   width: 300px;
-  z-index: 999;
-  /*position: ;*/
+  background-color: #909090;
+  color: white;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  top: 0.25rem;
+  right: 0.25rem;
+  z-index: 5;
+  position: absolute;
+  display: none;
 }
+
 @media only screen and (max-width: 650px) {
   header {
     height: 6rem;
