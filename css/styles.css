@@ -82,6 +82,13 @@ header a {
   text-decoration: none;
 }
 
+.toast {
+  font-family: sans-serif;
+  float: right;
+  width: 300px;
+  z-index: 999;
+  /*position: ;*/
+}
 @media only screen and (max-width: 650px) {
   header {
     height: 6rem;
