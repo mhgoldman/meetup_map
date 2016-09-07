@@ -21,7 +21,7 @@ function geocodeAddress(geocoder) {
   var address = $('.address').val();
   geocoder.geocode({'address': address}, function(results, status) {
     if (status === 'OK') {
-      loc = results[0].geometry.location;
+      var loc = results[0].geometry.location;
 
       map.setCenter(loc);
       addMarker(loc, "http://maps.google.com/mapfiles/ms/icons/green-dot.png", address, google.maps.Marker.MAX_ZINDEX + 1, null)
@@ -38,7 +38,7 @@ function findMeetups(loc) {
   var topicURLKey = null;
 
   if (topicSearchStr != '') {
-    encodedTopicSearchStr = encodeURIComponent(topicSearchStr);
+    var encodedTopicSearchStr = encodeURIComponent(topicSearchStr);
 
     $.getJSON('https://api.meetup.com/find/topics?key=165f2e85d23027f478a535b3436&photo-host=public&query=' + encodedTopicSearchStr + '&callback=?', function(data) {
       if (data.data.length > 0) {
@@ -62,11 +62,15 @@ function executeFindMeetups(loc, topic) {
   
   $.getJSON('https://api.meetup.com/2/groups?key=165f2e85d23027f478a535b3436&photo-host=public&topic=' + topic + '&lon=' + lng + '&lat=' + lat + '&callback=?', 
     function(data) {
-      numResults = data.results.length;
+      var numResults = data.results.length;
 
       for (i=0; i<numResults; i++) {
-        res = data.results[i];
-        addMarker({lat: res.lat, lng: res.lon}, null, res.name, null, res.link);
+        var res = data.results[i];
+        console.log(res);
+
+        var infoWindowHTML = "<h3><a target='_blank' href='" + res.link + "'>" + res.name + "</a></h3><p>" + res.description + "</p>";
+
+        addMarker({lat: res.lat, lng: res.lon}, null, res.name, null, infoWindowHTML);
       }
 
       updateBounds();
@@ -92,7 +96,7 @@ function clearMarkers() {
   markersArray = [];
 }
 
-function addMarker(pos, icon, title, zindex, url) {
+function addMarker(pos, icon, title, zindex, infoWindowHTML) {
   var marker = new google.maps.Marker({
     map: map,
     position: pos,
@@ -101,9 +105,12 @@ function addMarker(pos, icon, title, zindex, url) {
     zIndex: zindex
   });
 
-  if (url != null) {
+  if (infoWindowHTML != null) {
+    marker.infoWindow = new google.maps.InfoWindow({ content: infoWindowHTML });
+
     marker.addListener('click', function() {
-      window.open(url,'_blank');
+      closeAllInfoWindows();
+      marker.infoWindow.open(map, marker);
     });
   }
 
@@ -117,6 +124,14 @@ function updateBounds() {
   }
 
   map.fitBounds(bounds);
+}
+
+function closeAllInfoWindows() {
+  for (i=0; i<markersArray.length; i++) {
+    if (markersArray[i].infoWindow != null) {
+      markersArray[i].infoWindow.close();
+    }
+  }
 }
 
 function resizeMap() {

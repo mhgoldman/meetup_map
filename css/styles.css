@@ -33,15 +33,12 @@ header a {
 
 .form-container {
   padding-top: 0.5rem;
-  text-align: center;
   font-family: sans-serif;
   line-height: 30px;
-  width: 500px;
   float: right;
-  margin: 0.25rem 0.5rem 0 0;
+  margin: 0.25rem 1rem 0 0;
   color: white;
   font-size: 0.8rem;  
-
 }
 
 .main-form {
@@ -62,7 +59,6 @@ header a {
     outline-width: 0;
 }
 
-
 .submit {
   margin-top: -0.25rem;
   margin-left: 0.25rem;
@@ -70,6 +66,7 @@ header a {
   border: 1px solid white;
   color: white;
   vertical-align: middle;
+  padding: 0.125rem;
 }
 
 .spinner {
@@ -83,3 +80,31 @@ header a {
   height: 30px;
   vertical-align: middle;
  }
+
+ .gm-style-iw a {
+  text-decoration: none;
+ }
+
+@media only screen and (max-width: 650px) {
+  header {
+    height: 6rem;
+  }
+
+  header h1 {
+    padding-bottom: 0.25rem;
+    /*margin-bottom: 0.25rem;*/
+  }
+
+  .form-container {
+    display: block;
+    float: none;
+    margin-left: 0.5rem;
+    padding-top: 0;
+  }
+}
+
+@media only screen and (max-width: 425px) {
+  header {
+    height: 8rem;
+  }
+}
